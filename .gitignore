@@ -39,6 +39,7 @@ ENV/
 data/*.db
 data/*.csv
 data/*.parquet
+data/*.json
 reports/*.csv
 reports/*.md
 logs/*.log
