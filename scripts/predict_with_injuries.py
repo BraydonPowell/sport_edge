@@ -42,7 +42,7 @@ def load_injury_adjustments():
             data = json.load(f)
             return data.get('injuries', {})
     except FileNotFoundError:
-        print("⚠️  No injury data found. Run fetch_injuries_sportsdata.py first.")
+        print("⚠️  No injury data found. Run fetch_live_injuries.py first.")
         return {}
 
 

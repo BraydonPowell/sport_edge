@@ -194,6 +194,24 @@ Home edge: +5.2% (EV: +0.078)
 ✅ BET: Boston Celtics at -150
 ```
 
+### Live Injury Adjustments (Recommended)
+
+Fetch live injuries from ESPN and apply them to predictions:
+
+```bash
+# Fetch live injuries (NBA/NHL/NFL)
+python scripts/fetch_live_injuries.py
+
+# Run injury-adjusted predictions
+python scripts/predict_with_injuries.py
+```
+
+This will:
+1. Pull live injuries from ESPN (no API key required)
+2. Save to `data/current_injuries.json`
+3. Adjust team Elo ratings before predictions
+4. Mark impacted teams with 🏥 and show Elo adjustments
+
 ### Future Milestones
 
 See STATUS.md for implementation roadmap.
