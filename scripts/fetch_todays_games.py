@@ -67,11 +67,13 @@ def fetch_games_for_league(league):
 
         games = []
         for event in data:
-            # Check if game is today
+            # Check if game is within next 24 hours
             commence_time = datetime.fromisoformat(event['commence_time'].replace('Z', '+00:00'))
-            today = datetime.now().date()
+            now = datetime.now(commence_time.tzinfo)
+            hours_until_game = (commence_time - now).total_seconds() / 3600
 
-            if commence_time.date() != today:
+            # Skip games that already started or are more than 24 hours away
+            if hours_until_game < 0 or hours_until_game > 24:
                 continue
 
             # Get home/away teams and odds
@@ -184,9 +186,9 @@ def predict_game(elo, home_team, away_team, home_ml, away_ml):
 
 def main():
     print("=" * 60)
-    print("TODAY'S GAMES - Live Data from The Odds API")
+    print("UPCOMING GAMES (Next 24 Hours) - Live Data from The Odds API")
     print("=" * 60)
-    print(f"\nDate: {datetime.now().strftime('%Y-%m-%d')}")
+    print(f"\nCurrent Time: {datetime.now().strftime('%Y-%m-%d %I:%M %p')}")
 
     if not API_KEY:
         print("\n❌ ERROR: ODDS_API_KEY environment variable not set")
@@ -228,6 +230,8 @@ def main():
         print(f"{league} PREDICTIONS & EDGES")
         print(f"{'=' * 60}")
 
+        league_recommendations = []
+
         for game in games:
             print(f"\n{game['home_team']} vs {game['away_team']}")
             print(f"Time: {game['commence_time'].strftime('%I:%M %p')}")
@@ -253,7 +257,7 @@ def main():
 
             # Recommendations (1% threshold)
             if home_ev > 0.01:
-                recommendations.append({
+                league_recommendations.append({
                     'league': league,
                     'game': f"{game['home_team']} vs {game['away_team']}",
                     'bet': game['home_team'],
@@ -265,7 +269,7 @@ def main():
                 print(f"✅ BET: {game['home_team']} at {game['home_ml']:+.0f}")
 
             if away_ev > 0.01:
-                recommendations.append({
+                league_recommendations.append({
                     'league': league,
                     'game': f"{game['home_team']} vs {game['away_team']}",
                     'bet': game['away_team'],
@@ -276,7 +280,7 @@ def main():
                 })
                 print(f"✅ BET: {game['away_team']} at {game['away_ml']:+.0f}")
 
-        all_recommendations.extend(recommendations)
+        all_recommendations.extend(league_recommendations)
 
     # Final summary
     print("\n" + "=" * 60)
