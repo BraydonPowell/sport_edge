@@ -303,7 +303,22 @@ def main():
         print("\n❌ No positive EV bets found.")
         print("   (Threshold: 1% EV)")
 
-    print("=" * 60)
+    # Show top 5 best bets by EV
+    if all_recommendations:
+        print("\n" + "=" * 60)
+        print("🔥 TOP 5 BEST BETS (Highest Expected Value)")
+        print("=" * 60)
+
+        # Sort by EV descending and take top 5
+        top_bets = sorted(all_recommendations, key=lambda x: x['ev'], reverse=True)[:5]
+
+        for i, bet in enumerate(top_bets, 1):
+            print(f"\n#{i}. {bet['bet']} at {bet['odds']:+.0f} ({bet['league']})")
+            print(f"    💰 Expected Value: {bet['ev']:+.3f} ({bet['edge']:+.1f}% edge)")
+            print(f"    🕐 Game Time: {bet['time'].strftime('%I:%M %p')}")
+            print(f"    🏆 Matchup: {bet['game']}")
+
+    print("\n" + "=" * 60)
 
 
 if __name__ == "__main__":
