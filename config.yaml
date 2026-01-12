@@ -1,0 +1,39 @@
+# Sports Edge MVP Configuration
+
+# League and market settings
+league: "NBA"
+market: "moneyline"
+
+# Date ranges
+data:
+  start_date: "2022-10-01"  # Adjust to desired historical start
+  end_date: "2024-06-30"    # Adjust to desired historical end
+  backtest_start: "2023-10-01"  # Backtest window starts here
+
+# Model settings
+model:
+  type: "elo"  # Options: "elo", "logistic"
+  min_games_history: 10  # Minimum games before making predictions
+
+# Backtest policy
+backtest:
+  ev_threshold: 0.01  # 1% minimum expected value
+  stake_size: 1.0  # Flat stake in units
+  decision_time: "closing"  # Options: "closing", "pregame"
+
+# Feature engineering (if using logistic regression)
+features:
+  rolling_window: 10  # Games to use for rolling stats
+  home_advantage: true
+  rest_days: false  # Set true if data available
+
+# Reporting
+reporting:
+  output_dir: "reports"
+  alert_enabled: false
+  alert_channel: null  # Options: "discord", "telegram"
+
+# Data sources (optional, for future API integration)
+data_sources:
+  games_csv: "data/games.csv"  # Path to historical games CSV
+  odds_csv: "data/odds.csv"    # Path to historical odds CSV

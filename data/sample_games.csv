@@ -1,0 +1,41 @@
+game_id,date,home_team,away_team,home_score,away_score
+NBA_20231024_BOS_NYK,2023-10-24,Boston Celtics,New York Knicks,108,104
+NBA_20231024_LAL_DEN,2023-10-24,Los Angeles Lakers,Denver Nuggets,95,119
+NBA_20231025_MIA_DET,2023-10-25,Miami Heat,Detroit Pistons,103,102
+NBA_20231025_PHX_GSW,2023-10-25,Phoenix Suns,Golden State Warriors,108,104
+NBA_20231026_MIL_PHI,2023-10-26,Milwaukee Bucks,Philadelphia 76ers,118,117
+NBA_20231026_DAL_SAS,2023-10-26,Dallas Mavericks,San Antonio Spurs,126,119
+NBA_20231027_BKN_CLE,2023-10-27,Brooklyn Nets,Cleveland Cavaliers,97,113
+NBA_20231027_LAC_POR,2023-10-27,Los Angeles Clippers,Portland Trail Blazers,111,104
+NBA_20231028_BOS_MIA,2023-10-28,Boston Celtics,Miami Heat,119,111
+NBA_20231028_DEN_LAL,2023-10-28,Denver Nuggets,Los Angeles Lakers,119,107
+NBA_20231029_NYK_CLE,2023-10-29,New York Knicks,Cleveland Cavaliers,109,95
+NBA_20231029_GSW_SAC,2023-10-29,Golden State Warriors,Sacramento Kings,122,114
+NBA_20231030_PHI_TOR,2023-10-30,Philadelphia 76ers,Toronto Raptors,114,106
+NBA_20231030_CHI_OKC,2023-10-30,Chicago Bulls,Oklahoma City Thunder,97,104
+NBA_20231031_MIL_ATL,2023-10-31,Milwaukee Bucks,Atlanta Hawks,126,117
+NBA_20231031_MEM_UTA,2023-10-31,Memphis Grizzlies,Utah Jazz,119,109
+NBA_20231101_LAL_ORL,2023-11-01,Los Angeles Lakers,Orlando Magic,106,103
+NBA_20231101_DEN_MIN,2023-11-01,Denver Nuggets,Minnesota Timberwolves,110,103
+NBA_20231102_BOS_WAS,2023-11-02,Boston Celtics,Washington Wizards,126,107
+NBA_20231102_PHX_LAC,2023-11-02,Phoenix Suns,Los Angeles Clippers,100,107
+NBA_20231103_MIA_BOS,2023-11-03,Miami Heat,Boston Celtics,98,106
+NBA_20231103_DAL_HOU,2023-11-03,Dallas Mavericks,Houston Rockets,121,115
+NBA_20231104_GSW_MIN,2023-11-04,Golden State Warriors,Minnesota Timberwolves,104,101
+NBA_20231104_BKN_PHI,2023-11-04,Brooklyn Nets,Philadelphia 76ers,105,108
+NBA_20231105_TOR_MIL,2023-11-05,Toronto Raptors,Milwaukee Bucks,97,128
+NBA_20231105_LAL_LAC,2023-11-05,Los Angeles Lakers,Los Angeles Clippers,103,106
+NBA_20231106_DEN_MEM,2023-11-06,Denver Nuggets,Memphis Grizzlies,103,108
+NBA_20231106_PHX_UTA,2023-11-06,Phoenix Suns,Utah Jazz,131,128
+NBA_20231107_CLE_NYK,2023-11-07,Cleveland Cavaliers,New York Knicks,109,91
+NBA_20231107_SAC_DAL,2023-11-07,Sacramento Kings,Dallas Mavericks,109,120
+NBA_20231108_BOS_PHI,2023-11-08,Boston Celtics,Philadelphia 76ers,117,99
+NBA_20231108_MIA_CHA,2023-11-08,Miami Heat,Charlotte Hornets,111,105
+NBA_20231109_LAL_POR,2023-11-09,Los Angeles Lakers,Portland Trail Blazers,107,95
+NBA_20231109_MIL_OKC,2023-11-09,Milwaukee Bucks,Oklahoma City Thunder,118,128
+NBA_20231110_DEN_GSW,2023-11-10,Denver Nuggets,Golden State Warriors,119,103
+NBA_20231110_PHX_MIN,2023-11-10,Phoenix Suns,Minnesota Timberwolves,97,133
+NBA_20231111_NYK_WAS,2023-11-11,New York Knicks,Washington Wizards,120,99
+NBA_20231111_CHI_ATL,2023-11-11,Chicago Bulls,Atlanta Hawks,113,125
+NBA_20231112_BOS_BKN,2023-11-12,Boston Celtics,Brooklyn Nets,121,107
+NBA_20231112_LAC_HOU,2023-11-12,Los Angeles Clippers,Houston Rockets,111,103
