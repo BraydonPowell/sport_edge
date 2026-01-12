@@ -418,7 +418,7 @@ def main():
                 away_str = f"{bet['away_team']}: {away_injuries}" if away_injuries else f"{bet['away_team']}: none"
                 print(f"    🏥 Injuries: {home_str} | {away_str}")
 
-        log_recommendations(all_recommendations)
+        log_recommendations(top_bets)
         print("\n✓ Logged bets to data/live_bets.csv")
 
     print("\n" + "=" * 60)
