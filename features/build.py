@@ -181,40 +181,86 @@ def build_elo_features(
     # Sort by date to ensure chronological processing
     games_df = games_df.sort_values('date').reset_index(drop=True)
 
-    elo_system = EloRatingSystem(initial_elo, k_factor, home_advantage)
+    # If league column exists, maintain separate Elo systems per league
+    if 'league' in games_df.columns:
+        elo_systems = {}
+        features = []
 
-    features = []
+        for _, game in games_df.iterrows():
+            league = game['league']
 
-    for _, game in games_df.iterrows():
-        # Get ratings BEFORE the game (point-in-time)
-        home_elo = elo_system.get_rating(game['home_team'])
-        away_elo = elo_system.get_rating(game['away_team'])
+            # Initialize Elo system for this league if needed
+            if league not in elo_systems:
+                elo_systems[league] = EloRatingSystem(initial_elo, k_factor, home_advantage)
 
-        # Calculate prediction BEFORE the game
-        p_home, p_away = elo_system.predict_game(game['home_team'], game['away_team'])
+            elo_system = elo_systems[league]
 
-        # Store features
-        features.append({
-            'game_id': game['game_id'],
-            'date': game['date'],
-            'home_team': game['home_team'],
-            'away_team': game['away_team'],
-            'home_elo': home_elo,
-            'away_elo': away_elo,
-            'elo_diff': home_elo - away_elo,
-            'p_home': p_home,
-            'p_away': p_away,
-            'winner': game.get('winner')
-        })
+            # Get ratings BEFORE the game (point-in-time)
+            home_elo = elo_system.get_rating(game['home_team'])
+            away_elo = elo_system.get_rating(game['away_team'])
 
-        # Update ratings AFTER processing (for next game)
-        if pd.notna(game['home_score']) and pd.notna(game['away_score']):
-            elo_system.update_ratings(
-                game['home_team'],
-                game['away_team'],
-                int(game['home_score']),
-                int(game['away_score'])
-            )
+            # Calculate prediction BEFORE the game
+            p_home, p_away = elo_system.predict_game(game['home_team'], game['away_team'])
+
+            # Store features
+            features.append({
+                'game_id': game['game_id'],
+                'date': game['date'],
+                'league': league,
+                'home_team': game['home_team'],
+                'away_team': game['away_team'],
+                'home_elo': home_elo,
+                'away_elo': away_elo,
+                'elo_diff': home_elo - away_elo,
+                'p_home': p_home,
+                'p_away': p_away,
+                'winner': game.get('winner')
+            })
+
+            # Update ratings AFTER processing (for next game)
+            if pd.notna(game['home_score']) and pd.notna(game['away_score']):
+                elo_system.update_ratings(
+                    game['home_team'],
+                    game['away_team'],
+                    int(game['home_score']),
+                    int(game['away_score'])
+                )
+
+    else:
+        # Single Elo system for all games
+        elo_system = EloRatingSystem(initial_elo, k_factor, home_advantage)
+        features = []
+
+        for _, game in games_df.iterrows():
+            # Get ratings BEFORE the game (point-in-time)
+            home_elo = elo_system.get_rating(game['home_team'])
+            away_elo = elo_system.get_rating(game['away_team'])
+
+            # Calculate prediction BEFORE the game
+            p_home, p_away = elo_system.predict_game(game['home_team'], game['away_team'])
+
+            # Store features
+            features.append({
+                'game_id': game['game_id'],
+                'date': game['date'],
+                'home_team': game['home_team'],
+                'away_team': game['away_team'],
+                'home_elo': home_elo,
+                'away_elo': away_elo,
+                'elo_diff': home_elo - away_elo,
+                'p_home': p_home,
+                'p_away': p_away,
+                'winner': game.get('winner')
+            })
+
+            # Update ratings AFTER processing (for next game)
+            if pd.notna(game['home_score']) and pd.notna(game['away_score']):
+                elo_system.update_ratings(
+                    game['home_team'],
+                    game['away_team'],
+                    int(game['home_score']),
+                    int(game['away_score'])
+                )
 
     return pd.DataFrame(features)
 
@@ -260,7 +306,7 @@ def save_team_ratings_to_db(
 
 
 def build_features_from_db(
-    league: str = "NBA",
+    league: Optional[str] = None,
     initial_elo: float = DEFAULT_INITIAL_ELO,
     k_factor: float = DEFAULT_K_FACTOR,
     home_advantage: float = DEFAULT_HOME_ADVANTAGE
@@ -269,7 +315,7 @@ def build_features_from_db(
     Build features from games in database.
 
     Args:
-        league: League to filter games
+        league: League to filter games (None = all leagues)
         initial_elo: Starting Elo rating
         k_factor: Elo update rate
         home_advantage: Home court advantage
@@ -281,17 +327,18 @@ def build_features_from_db(
 
     try:
         # Load games from database
-        games = (
-            session.query(Game)
-            .filter(Game.league == league)
-            .order_by(Game.date)
-            .all()
-        )
+        query = session.query(Game).order_by(Game.date)
+
+        if league:
+            query = query.filter(Game.league == league)
+
+        games = query.all()
 
         # Convert to DataFrame
         games_df = pd.DataFrame([{
             'game_id': g.game_id,
             'date': g.date,
+            'league': g.league,
             'home_team': g.home_team,
             'away_team': g.away_team,
             'home_score': g.home_score,

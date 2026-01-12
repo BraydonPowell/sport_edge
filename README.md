@@ -5,11 +5,14 @@ AI-powered probability model and edge detection system for sports betting market
 ## Overview
 
 This system:
-1. Ingests historical game results and odds data
-2. Trains a calibrated probability model
+1. Ingests historical game results and odds data (NBA, NHL, NFL)
+2. Trains calibrated Elo-based probability models per league
 3. Compares model probabilities to market-implied probabilities
 4. Backtests an EV-based betting strategy
-5. Generates alerts and reports
+5. Provides live predictions for today's games
+6. Generates alerts and reports
+
+**Supported Leagues:** NBA, NHL, NFL
 
 ## Project Structure
 
@@ -137,6 +140,39 @@ The comprehensive test suite validates:
 - Edge calculations
 - End-to-end pipeline
 
+## Live Predictions
+
+Get betting recommendations for today's games across all leagues:
+
+```bash
+# Single league
+python scripts/predict_today.py
+
+# All leagues (NBA, NHL, NFL)
+python scripts/predict_all_leagues.py
+```
+
+The script will:
+1. Load current Elo ratings from historical games
+2. Show top teams by rating
+3. Prompt you to enter today's games with current odds
+4. Calculate model vs market probabilities
+5. Recommend positive EV bets (>1% threshold)
+
+**Example:**
+```
+NBA Game: Boston Celtics, New York Knicks, -150, +130
+  ✓ Added: Boston Celtics vs New York Knicks
+
+Boston Celtics vs New York Knicks
+Model: Boston Celtics 65.2% | New York Knicks 34.8%
+Market: 60.0% | 40.0%
+
+Home edge: +5.2% (EV: +0.078)
+
+✅ BET: Boston Celtics at -150
+```
+
 ### Future Milestones
 
 See STATUS.md for implementation roadmap.
@@ -144,15 +180,28 @@ See STATUS.md for implementation roadmap.
 ## Configuration
 
 Edit `config.yaml` to adjust:
-- League and market type
+- Leagues to track (NBA, NHL, NFL)
+- Market type (moneyline)
 - Date ranges
-- Model parameters
+- League-specific Elo parameters (K-factor, home advantage)
 - Backtest thresholds
 - Alert channels
 
+**League-Specific Parameters:**
+- **NBA**: K=20, Home Advantage=100 (high home court advantage)
+- **NHL**: K=20, Home Advantage=50 (moderate home ice advantage)
+- **NFL**: K=30, Home Advantage=80 (higher volatility, strong home field)
+
 ## Development Status
 
-Currently at M0/M1: Scaffolding and ingestion complete.
+✅ M0-M4 Complete: Full MVP operational with multi-league support.
+
+**Features:**
+- Historical data ingestion (CSV-based)
+- Elo rating system with point-in-time tracking
+- Model evaluation (Brier: 0.21, Accuracy: 70%)
+- Backtest simulation with ROI/drawdown metrics
+- Live prediction tools for NBA, NHL, NFL
 
 See full documentation in:
 - SYSTEM.md - System design

@@ -1,7 +1,11 @@
 # Sports Edge MVP Configuration
 
-# League and market settings
-league: "NBA"
+# Leagues to track
+leagues:
+  - "NBA"
+  - "NHL"
+  - "NFL"
+
 market: "moneyline"
 
 # Date ranges
@@ -14,6 +18,21 @@ data:
 model:
   type: "elo"  # Options: "elo", "logistic"
   min_games_history: 10  # Minimum games before making predictions
+
+  # League-specific Elo parameters
+  elo:
+    NBA:
+      initial: 1500
+      k_factor: 20
+      home_advantage: 100
+    NHL:
+      initial: 1500
+      k_factor: 20
+      home_advantage: 50
+    NFL:
+      initial: 1500
+      k_factor: 30
+      home_advantage: 80
 
 # Backtest policy
 backtest:
