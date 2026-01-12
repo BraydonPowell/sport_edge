@@ -140,15 +140,36 @@ The comprehensive test suite validates:
 - Edge calculations
 - End-to-end pipeline
 
-## Live Predictions
+## Live Predictions for Today's Games
 
-Get betting recommendations for today's games across all leagues:
+### Option 1: Automatic (Recommended) - Fetch Live Data
+
+Get today's games and odds automatically from The Odds API:
 
 ```bash
-# Single league
+# Get a free API key from https://the-odds-api.com/ (500 requests/month free)
+export ODDS_API_KEY=your_key_here
+
+# Fetch and analyze today's games
+python scripts/fetch_todays_games.py
+```
+
+This will:
+1. Fetch today's games for NBA, NHL, and NFL
+2. Get current odds from major sportsbooks
+3. Load historical Elo ratings
+4. Calculate edges and recommend positive EV bets
+5. Show game times and bookmaker info
+
+### Option 2: Manual Entry
+
+If you prefer to enter games manually or don't have an API key:
+
+```bash
+# Single league (NBA)
 python scripts/predict_today.py
 
-# All leagues (NBA, NHL, NFL)
+# All leagues with manual entry
 python scripts/predict_all_leagues.py
 ```
 
