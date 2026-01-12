@@ -1,7 +1,7 @@
 # STATUS
 
 ## Current State
-✅ M0-M4 COMPLETE - Full MVP pipeline: ingestion → features → model → backtest. 31 bets simulated with complete metrics.
+✅ M0-M4 COMPLETE - Full MVP pipeline: ingestion → features → model → backtest → live predictions. Ready for today's games.
 
 ## MVP Target
 End-to-end pipeline for NBA moneyline:
@@ -128,6 +128,11 @@ Acceptance: One command generates a readable daily report.
   - Flat stake sizing
 - ✓ 31 bets simulated
 - ✓ 55% win rate
+- ✓ `scripts/predict_today.py` - Live prediction tool
+  - Loads current Elo ratings from historical games
+  - Interactive CLI for entering today's games + odds
+  - Shows model vs market probabilities
+  - Recommends positive EV bets (>1% threshold)
 
 ### Documentation
 - ✓ `README.md` - Complete setup and usage instructions
@@ -135,10 +140,16 @@ Acceptance: One command generates a readable daily report.
 - ✓ Stub files for M3-M5 modules (models, backtest, report)
 
 ## Immediate Next Tasks
-✅ M0-M4 COMPLETE. M5 (Reporting) optional.
+✅ M0-M4 COMPLETE. Live prediction tool ready.
 
-**MVP is functionally complete.**
-Optional M5: Daily edges CSV + summary markdown.
+**MVP is functionally complete and ready for production use.**
+
+To use for today's games:
+1. Run `python scripts/predict_today.py`
+2. Enter today's games with current odds
+3. Get betting recommendations for positive EV opportunities
+
+Optional M5: Daily edges CSV + summary markdown for automated reporting.
 
 ## Risks / Blockers
 - Data source reliability (odds snapshots are hardest)
