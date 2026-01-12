@@ -11,6 +11,8 @@ Usage:
 import sys
 import os
 import json
+import csv
+from pathlib import Path
 from datetime import datetime
 import requests
 
@@ -46,6 +48,24 @@ def load_injury_adjustments():
         return {}
 
 
+def get_team_injuries(injuries, league, team_name):
+    """Return a list of injury records for a given team."""
+    return injuries.get(league, {}).get(team_name, [])
+
+
+def format_injury_list(injury_list, max_players=6):
+    """Format injuries for compact display."""
+    if not injury_list:
+        return ""
+    items = []
+    for injury in injury_list[:max_players]:
+        player = injury.get("player", "Unknown")
+        status = injury.get("status", "Unknown")
+        items.append(f"{player} ({status})")
+    suffix = "…" if len(injury_list) > max_players else ""
+    return ", ".join(items) + suffix
+
+
 def get_injury_adjustment(team_name, league):
     """Get Elo adjustment for injuries."""
     injuries = load_injury_adjustments()
@@ -56,6 +76,54 @@ def get_injury_adjustment(team_name, league):
         return 0
 
     return sum(injury.get('impact', 0) for injury in team_injuries)
+
+
+def log_recommendations(recommendations, filename="data/live_bets.csv"):
+    """Append recommended bets to a CSV for ROI tracking."""
+    if not recommendations:
+        return
+
+    Path("data").mkdir(exist_ok=True)
+    file_exists = Path(filename).exists()
+
+    fieldnames = [
+        "logged_at",
+        "league",
+        "home_team",
+        "away_team",
+        "bet_team",
+        "odds",
+        "edge_pct",
+        "ev",
+        "bookmaker",
+        "commence_time",
+        "p_home",
+        "p_away",
+        "p_market_home",
+        "p_market_away",
+    ]
+
+    with open(filename, "a", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        if not file_exists:
+            writer.writeheader()
+        for rec in recommendations:
+            writer.writerow({
+                "logged_at": datetime.utcnow().isoformat(),
+                "league": rec["league"],
+                "home_team": rec["home_team"],
+                "away_team": rec["away_team"],
+                "bet_team": rec["bet"],
+                "odds": f"{rec['odds']:.0f}",
+                "edge_pct": f"{rec['edge']:.2f}",
+                "ev": f"{rec['ev']:.4f}",
+                "bookmaker": rec.get("bookmaker", ""),
+                "commence_time": rec["time"].isoformat(),
+                "p_home": f"{rec.get('p_home', 0):.6f}",
+                "p_away": f"{rec.get('p_away', 0):.6f}",
+                "p_market_home": f"{rec.get('p_market_home', 0):.6f}",
+                "p_market_away": f"{rec.get('p_market_away', 0):.6f}",
+            })
 
 
 def get_current_elos_with_injuries(league):
@@ -262,7 +330,10 @@ def main():
             home_adj = injury_adjustments.get(game['home_team'], 0)
             away_adj = injury_adjustments.get(game['away_team'], 0)
             if home_adj != 0 or away_adj != 0:
-                print(f"🏥 Injuries: {game['home_team']} ({home_adj:+.0f}) | {game['away_team']} ({away_adj:+.0f})")
+                print(
+                    f"🏥 Injuries: {game['home_team']} ({home_adj:+.0f}) | "
+                    f"{game['away_team']} ({away_adj:+.0f})"
+                )
 
             print("-" * 60)
 
@@ -287,11 +358,18 @@ def main():
                 league_recommendations.append({
                     'league': league,
                     'game': f"{game['home_team']} vs {game['away_team']}",
+                    'home_team': game['home_team'],
+                    'away_team': game['away_team'],
                     'bet': game['home_team'],
                     'odds': game['home_ml'],
                     'edge': result['home_edge']['edge_pct'],
                     'ev': home_ev,
-                    'time': game['commence_time']
+                    'time': game['commence_time'],
+                    'bookmaker': game['bookmaker'],
+                    'p_home': result['p_home'],
+                    'p_away': result['p_away'],
+                    'p_market_home': result['home_edge']['p_market_fair'],
+                    'p_market_away': result['away_edge']['p_market_fair'],
                 })
                 print(f"✅ BET: {game['home_team']} at {game['home_ml']:+.0f}")
 
@@ -299,29 +377,49 @@ def main():
                 league_recommendations.append({
                     'league': league,
                     'game': f"{game['home_team']} vs {game['away_team']}",
+                    'home_team': game['home_team'],
+                    'away_team': game['away_team'],
                     'bet': game['away_team'],
                     'odds': game['away_ml'],
                     'edge': result['away_edge']['edge_pct'],
                     'ev': away_ev,
-                    'time': game['commence_time']
+                    'time': game['commence_time'],
+                    'bookmaker': game['bookmaker'],
+                    'p_home': result['p_home'],
+                    'p_away': result['p_away'],
+                    'p_market_home': result['home_edge']['p_market_fair'],
+                    'p_market_away': result['away_edge']['p_market_fair'],
                 })
                 print(f"✅ BET: {game['away_team']} at {game['away_ml']:+.0f}")
 
         all_recommendations.extend(league_recommendations)
 
-    # Top 5 bets
+    # Top 5 bets by edge
     if all_recommendations:
         print("\n" + "=" * 60)
-        print("🔥 TOP 5 BEST BETS (Injury-Adjusted)")
+        print("🔥 TOP 5 BEST BETS (Highest Edge)")
         print("=" * 60)
 
-        top_bets = sorted(all_recommendations, key=lambda x: x['ev'], reverse=True)[:5]
+        top_bets = sorted(all_recommendations, key=lambda x: x['edge'], reverse=True)[:5]
 
         for i, bet in enumerate(top_bets, 1):
             print(f"\n#{i}. {bet['bet']} at {bet['odds']:+.0f} ({bet['league']})")
             print(f"    💰 Expected Value: {bet['ev']:+.3f} ({bet['edge']:+.1f}% edge)")
             print(f"    🕐 Game Time: {bet['time'].strftime('%I:%M %p')}")
             print(f"    🏆 Matchup: {bet['game']}")
+            home_injuries = format_injury_list(
+                get_team_injuries(injuries, bet['league'], bet['home_team'])
+            )
+            away_injuries = format_injury_list(
+                get_team_injuries(injuries, bet['league'], bet['away_team'])
+            )
+            if home_injuries or away_injuries:
+                home_str = f"{bet['home_team']}: {home_injuries}" if home_injuries else f"{bet['home_team']}: none"
+                away_str = f"{bet['away_team']}: {away_injuries}" if away_injuries else f"{bet['away_team']}: none"
+                print(f"    🏥 Injuries: {home_str} | {away_str}")
+
+        log_recommendations(all_recommendations)
+        print("\n✓ Logged bets to data/live_bets.csv")
 
     print("\n" + "=" * 60)
 

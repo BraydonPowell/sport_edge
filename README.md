@@ -212,6 +212,15 @@ This will:
 3. Adjust team Elo ratings before predictions
 4. Mark impacted teams with 🏥 and show Elo adjustments
 
+### ROI Tracking (Live Bets)
+
+The prediction script logs bets to `data/live_bets.csv`. After games finish
+and results are ingested into the database, you can compute ROI:
+
+```bash
+python scripts/roi_report.py
+```
+
 ### Future Milestones
 
 See STATUS.md for implementation roadmap.
