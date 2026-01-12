@@ -37,6 +37,7 @@ ENV/
 
 # Data and outputs
 data/*.db
+data/*.csv
 data/*.parquet
 reports/*.csv
 reports/*.md

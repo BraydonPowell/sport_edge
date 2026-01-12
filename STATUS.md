@@ -1,7 +1,7 @@
 # STATUS
 
 ## Current State
-✅ M0 and M1 COMPLETE - Fully working end-to-end ingestion pipeline with sample data.
+✅ M0, M1, and M2 COMPLETE - Full ingestion pipeline + Elo-based feature engineering with validated anti-leakage constraints.
 
 ## MVP Target
 End-to-end pipeline for NBA moneyline:
@@ -31,12 +31,16 @@ Acceptance: DB contains games + odds for at least one full season. ✅ PASSED
 
 **Status:** Fully working pipeline. Sample data loaded successfully. All functions tested.
 
-### M2 — Features
-- [ ] Implement point-in-time rolling features OR Elo computation
-- [ ] Validate anti-leakage with unit tests
-- [ ] Export training dataset (Parquet/CSV)
+### M2 — Features ✅ COMPLETE
+- [x] Implement Elo computation with point-in-time tracking
+- [x] Validate anti-leakage with comprehensive unit tests
+- [x] Export training dataset (CSV + Parquet)
+- [x] Build features from database
+- [x] Chronological processing verified
 
-Acceptance: Features for each game only depend on prior games.
+Acceptance: Features for each game only depend on prior games. ✅ PASSED
+
+**Status:** Elo rating system fully implemented. 13 unit tests passing. Point-in-time constraints validated. Training dataset exported.
 
 ### M3 — Model
 - [ ] Train baseline model
@@ -102,18 +106,30 @@ Acceptance: One command generates a readable daily report.
 - ✓ `scripts/verify_data.py` - Data verification with sanity checks
 - ✓ `scripts/quickstart.sh` - One-command setup script
 
+### Feature Engineering (M2)
+- ✓ `features/build.py` - Complete Elo rating system:
+  - `EloRatingSystem` class with point-in-time tracking
+  - `build_elo_features()` - chronological feature generation
+  - `build_features_from_db()` - database integration
+  - `save_team_ratings_to_db()` - rating persistence
+- ✓ `tests/test_features.py` - Comprehensive test suite (13 tests)
+- ✓ `scripts/export_training_data.py` - Training dataset export
+- ✓ Anti-leakage validation with point-in-time tests
+- ✓ Training features: CSV (6KB) + Parquet (8.5KB)
+
 ### Documentation
 - ✓ `README.md` - Complete setup and usage instructions
 - ✓ `STATUS.md` - Implementation status tracking
-- ✓ Stub files for M2-M5 modules (features, models, backtest, report)
+- ✓ Stub files for M3-M5 modules (models, backtest, report)
 
 ## Immediate Next Tasks
-✅ M0 and M1 are COMPLETE. Ready to proceed to M2.
+✅ M0, M1, and M2 are COMPLETE. Ready to proceed to M3.
 
-**Next milestone: M2 - Features**
-1) Implement Elo computation OR rolling features in `features/build.py`
-2) Validate anti-leakage with unit tests
-3) Export training dataset
+**Next milestone: M3 - Model**
+1) Train baseline Elo model (or logistic regression)
+2) Time-split evaluation (train on early games, test on later games)
+3) Calibration check + optional calibration step
+4) Save model artifact with versioning
 
 ## Risks / Blockers
 - Data source reliability (odds snapshots are hardest)

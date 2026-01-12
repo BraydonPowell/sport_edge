@@ -114,6 +114,61 @@ session.close()
 "
 echo ""
 
+# Test 6: Feature generation
+echo "Test 6: Feature Generation (Elo)"
+echo "------------------------------------------"
+python -c "
+from features.build import EloRatingSystem, build_elo_features
+import pandas as pd
+from datetime import datetime
+
+# Test Elo system
+elo = EloRatingSystem()
+assert elo.get_rating('Team A') == 1500
+print('✓ Elo initialization working')
+
+# Test feature building
+games_df = pd.DataFrame([
+    {
+        'game_id': 'G1',
+        'date': datetime(2023, 1, 1),
+        'home_team': 'Team A',
+        'away_team': 'Team B',
+        'home_score': 100,
+        'away_score': 95,
+        'winner': 'home'
+    },
+    {
+        'game_id': 'G2',
+        'date': datetime(2023, 1, 2),
+        'home_team': 'Team A',
+        'away_team': 'Team B',
+        'home_score': 90,
+        'away_score': 95,
+        'winner': 'away'
+    },
+])
+
+features_df = build_elo_features(games_df)
+assert len(features_df) == 2
+assert 'home_elo' in features_df.columns
+assert 'p_home' in features_df.columns
+
+# Verify point-in-time: G1 should start at 1500
+g1 = features_df[features_df['game_id'] == 'G1'].iloc[0]
+assert g1['home_elo'] == 1500
+assert g1['away_elo'] == 1500
+print('✓ Point-in-time constraint validated')
+
+# G2 should reflect G1 outcome
+g2 = features_df[features_df['game_id'] == 'G2'].iloc[0]
+assert g2['home_elo'] > 1500  # Team A won G1
+print('✓ No data leakage detected')
+
+print('✓ Feature generation test passed')
+"
+echo ""
+
 echo "=========================================="
 echo "All Tests Passed! ✓"
 echo "=========================================="
@@ -124,5 +179,7 @@ echo "  ✓ Database schema valid"
 echo "  ✓ CSV ingestion working"
 echo "  ✓ Edge calculations accurate"
 echo "  ✓ End-to-end pipeline operational"
+echo "  ✓ Feature generation (Elo) working"
+echo "  ✓ Point-in-time constraints validated"
 echo ""
-echo "M0 + M1 are fully complete and tested."
+echo "M0 + M1 + M2 are fully complete and tested."
