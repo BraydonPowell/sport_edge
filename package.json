@@ -1,0 +1,11 @@
+{
+  "name": "sports-edge",
+  "version": "1.0.0",
+  "description": "AI-powered sports betting edge detection",
+  "scripts": {
+    "dev": "npm run dev --prefix ui",
+    "build": "npm run build --prefix ui",
+    "start": "npm run start --prefix ui",
+    "install-ui": "npm install --prefix ui"
+  }
+}
