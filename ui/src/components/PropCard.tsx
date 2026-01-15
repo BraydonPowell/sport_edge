@@ -106,22 +106,21 @@ export default function PropCard({
   const betStakeDollars = isOver ? stakeDollarsOver : stakeDollarsUnder;
 
   return (
-    <div className="relative overflow-hidden rounded-xl border border-[#2a2a35] bg-[#12121a] hover:border-[#3a3a45] transition-all h-full flex flex-col">
-      {/* Rank Badge */}
-      {rank && (
-        <div className="absolute top-3 left-3 w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 to-pink-500 flex items-center justify-center z-10">
-          <span className="text-white font-bold text-sm">#{rank}</span>
-        </div>
-      )}
-
+    <div className="overflow-hidden rounded-xl border border-[#2a2a35] bg-[#12121a] hover:border-[#3a3a45] transition-all h-full flex flex-col">
       <div className="p-5 pt-4 flex flex-col flex-1">
         {/* Header: Player + Prop */}
-        <div className="flex items-start justify-between mb-4 pl-10">
+        <div className="flex items-start gap-3 mb-4">
+          {/* Rank Badge */}
+          {rank && (
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 to-pink-500 flex items-center justify-center flex-shrink-0">
+              <span className="text-white font-bold text-sm">#{rank}</span>
+            </div>
+          )}
           <div className="min-w-0 flex-1">
             <div className="text-lg font-bold text-[#f0f0f5] truncate">{playerName}</div>
             <div className="text-sm text-[#71717a]">{team} vs {opponent}</div>
           </div>
-          <div className={`px-3 py-1 rounded-full text-sm font-bold flex-shrink-0 ml-2 ${isOver ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+          <div className={`px-3 py-1 rounded-full text-sm font-bold flex-shrink-0 ${isOver ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
             {recommendedSide?.toUpperCase()}
           </div>
         </div>
