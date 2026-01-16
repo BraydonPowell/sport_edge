@@ -1,4 +1,4 @@
-"""
+on t"""
 Database schema definition for Sports Edge MVP.
 Uses SQLAlchemy ORM for database abstraction.
 """

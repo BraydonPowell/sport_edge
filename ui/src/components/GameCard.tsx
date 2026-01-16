@@ -190,22 +190,20 @@ export default function GameCard({
 
   return (
     <div
-      className={`relative overflow-hidden rounded-2xl border transition-all duration-300 ${
-        hasEdge
-          ? 'border-green-500/50 bg-gradient-to-br from-[#12121a] to-[#0d1f0d] glow-green'
-          : 'border-[#2a2a35] bg-[#12121a] hover:border-[#3a3a45]'
+      className={`relative overflow-hidden rounded-2xl transition-all duration-300 neon-panel ${
+        hasEdge ? 'neon-panel--edge' : ''
       }`}
     >
       {/* Recommended Badge */}
       {hasEdge && (
-        <div className="absolute top-0 right-0 bg-green-500 text-black text-xs font-bold px-3 py-1 rounded-bl-lg">
+        <div className="absolute top-0 right-0 bg-[#6ad7ff] text-[#050507] text-xs font-bold px-3 py-1 rounded-bl-lg">
           EDGE DETECTED
         </div>
       )}
 
       <div className="p-6">
         {(league || gameTime) && (
-          <div className="flex justify-between text-xs text-[#71717a] mb-3">
+          <div className="flex justify-between text-xs neon-muted mb-3">
             <span className="uppercase tracking-wider">{league || ''}</span>
             <span>{gameTime ? new Date(gameTime).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : ''}</span>
           </div>
@@ -215,13 +213,13 @@ export default function GameCard({
           {/* Away Team */}
           <div className="flex-1 text-center">
             <div className="text-3xl font-bold mb-1">{getTeamAbbrev(awayTeam)}</div>
-            <div className="text-sm text-[#71717a] mb-2">{awayTeam}</div>
+            <div className="text-sm neon-muted mb-2">{awayTeam}</div>
             <div className="flex items-center justify-center gap-2">
-              <span className={`text-2xl font-mono font-bold ${recommendedBet === 'away' ? 'text-green-400' : 'text-[#f0f0f5]'}`}>
+              <span className={`text-2xl font-mono font-bold ${recommendedBet === 'away' ? 'text-[#6ad7ff]' : 'text-[#f2f2f7]'}`}>
                 {formatOdds(awayOdds)}
               </span>
               {recommendedBet === 'away' && (
-                <span className="text-green-400 animate-pulse-glow">*</span>
+                <span className="text-[#6ad7ff] animate-pulse-glow">*</span>
               )}
             </div>
           </div>
@@ -230,29 +228,29 @@ export default function GameCard({
           <div className="px-6">
             {showDraw ? (
               <div className="text-center">
-                <div className="text-xs text-[#71717a] mb-1">DRAW</div>
-                <div className={`text-sm font-mono font-bold ${recommendedBet === 'draw' ? 'text-green-400' : 'text-[#f0f0f5]'}`}>
+                <div className="text-xs neon-muted mb-1">DRAW</div>
+                <div className={`text-sm font-mono font-bold ${recommendedBet === 'draw' ? 'text-[#6ad7ff]' : 'text-[#f2f2f7]'}`}>
                   {drawOdds !== null ? formatOdds(drawOdds) : '--'}
                 </div>
-                <div className="text-xs text-[#71717a] mt-1">
+                <div className="text-xs neon-muted mt-1">
                   {drawProbability?.toFixed(1)}%
                 </div>
               </div>
             ) : (
-              <div className="text-[#71717a] text-xl font-light">@</div>
+              <div className="neon-muted text-xl font-light">@</div>
             )}
           </div>
 
           {/* Home Team */}
           <div className="flex-1 text-center">
             <div className="text-3xl font-bold mb-1">{getTeamAbbrev(homeTeam)}</div>
-            <div className="text-sm text-[#71717a] mb-2">{homeTeam}</div>
+            <div className="text-sm neon-muted mb-2">{homeTeam}</div>
             <div className="flex items-center justify-center gap-2">
-              <span className={`text-2xl font-mono font-bold ${recommendedBet === 'home' ? 'text-green-400' : 'text-[#f0f0f5]'}`}>
+              <span className={`text-2xl font-mono font-bold ${recommendedBet === 'home' ? 'text-[#6ad7ff]' : 'text-[#f2f2f7]'}`}>
                 {formatOdds(homeOdds)}
               </span>
               {recommendedBet === 'home' && (
-                <span className="text-green-400 animate-pulse-glow">*</span>
+                <span className="text-[#6ad7ff] animate-pulse-glow">*</span>
               )}
             </div>
           </div>
@@ -261,34 +259,34 @@ export default function GameCard({
         {/* Probability Bars */}
         <div className="mb-6">
           <div className="flex justify-between text-sm mb-2">
-            <span className="text-[#71717a]">Win Probability</span>
+            <span className="neon-muted">Win Probability</span>
           </div>
-          <div className="flex h-3 rounded-full overflow-hidden bg-[#2a2a35]">
+          <div className="flex h-3 rounded-full overflow-hidden bg-[#161622]">
             <div
-              className={`transition-all duration-500 ${recommendedBet === 'away' ? 'bg-green-500' : 'bg-blue-500'}`}
+              className={`transition-all duration-500 ${recommendedBet === 'away' ? 'bg-[#6ad7ff]' : 'bg-[#402fb5]'}`}
               style={{ width: `${awayProbability}%` }}
             />
             {showDraw && (
               <div
-                className={`transition-all duration-500 ${recommendedBet === 'draw' ? 'bg-green-500' : 'bg-purple-500'}`}
+                className={`transition-all duration-500 ${recommendedBet === 'draw' ? 'bg-[#6ad7ff]' : 'bg-[#7a4fe5]'}`}
                 style={{ width: `${drawProbability ?? 0}%` }}
               />
             )}
             <div
-              className={`transition-all duration-500 ${recommendedBet === 'home' ? 'bg-green-500' : 'bg-orange-500'}`}
+              className={`transition-all duration-500 ${recommendedBet === 'home' ? 'bg-[#6ad7ff]' : 'bg-[#cf30aa]'}`}
               style={{ width: `${homeProbability}%` }}
             />
           </div>
           <div className="flex justify-between text-sm mt-2">
-            <span className={recommendedBet === 'away' ? 'text-green-400 font-semibold' : 'text-[#71717a]'}>
+            <span className={recommendedBet === 'away' ? 'text-[#6ad7ff] font-semibold' : 'neon-muted'}>
               {awayProbability}%
             </span>
             {showDraw && (
-              <span className={recommendedBet === 'draw' ? 'text-green-400 font-semibold' : 'text-[#71717a]'}>
+              <span className={recommendedBet === 'draw' ? 'text-[#6ad7ff] font-semibold' : 'neon-muted'}>
                 {drawProbability?.toFixed(1)}%
               </span>
             )}
-            <span className={recommendedBet === 'home' ? 'text-green-400 font-semibold' : 'text-[#71717a]'}>
+            <span className={recommendedBet === 'home' ? 'text-[#6ad7ff] font-semibold' : 'neon-muted'}>
               {homeProbability}%
             </span>
           </div>
@@ -297,8 +295,8 @@ export default function GameCard({
         {/* Stats Grid */}
         <div className="grid grid-cols-2 gap-4 mb-6">
           {/* Elo Ratings */}
-          <div className="bg-[#0a0a0f] rounded-xl p-4">
-            <div className="text-xs text-[#71717a] uppercase tracking-wider mb-2">Elo Rating</div>
+          <div className="bg-[#07070d] rounded-xl p-4 border border-[rgba(90,86,140,0.35)]">
+            <div className="text-xs neon-muted uppercase tracking-wider mb-2">Elo Rating</div>
             <div className="flex justify-between">
               <div>
                 <div className="text-lg font-mono">{awayEloAdjusted}</div>
@@ -316,18 +314,18 @@ export default function GameCard({
           </div>
 
           {/* Edge */}
-          <div className="bg-[#0a0a0f] rounded-xl p-4">
-            <div className="text-xs text-[#71717a] uppercase tracking-wider mb-2">Edge %</div>
+          <div className="bg-[#07070d] rounded-xl p-4 border border-[rgba(90,86,140,0.35)]">
+            <div className="text-xs neon-muted uppercase tracking-wider mb-2">Edge %</div>
             <div className={`grid ${showDraw ? 'grid-cols-3' : 'grid-cols-2'} gap-2`}>
-              <div className={`text-lg font-mono ${awayEdge > 0 ? 'text-green-400' : 'text-red-400'}`}>
+              <div className={`text-lg font-mono ${awayEdge > 0 ? 'text-[#6ad7ff]' : 'text-[#ef4444]'}`}>
                 {awayEdge > 0 ? '+' : ''}{awayEdge}%
               </div>
               {showDraw && (
-                <div className={`text-lg font-mono text-center ${drawEdge && drawEdge > 0 ? 'text-green-400' : 'text-red-400'}`}>
+                <div className={`text-lg font-mono text-center ${drawEdge && drawEdge > 0 ? 'text-[#6ad7ff]' : 'text-[#ef4444]'}`}>
                   {drawEdge && drawEdge > 0 ? '+' : ''}{drawEdge ?? 0}%
                 </div>
               )}
-              <div className={`text-lg font-mono ${homeEdge > 0 ? 'text-green-400' : 'text-red-400'}`}>
+              <div className={`text-lg font-mono ${homeEdge > 0 ? 'text-[#6ad7ff]' : 'text-[#ef4444]'}`}>
                 {homeEdge > 0 ? '+' : ''}{homeEdge}%
               </div>
             </div>
@@ -337,45 +335,45 @@ export default function GameCard({
         {/* Confidence + Stake */}
         {hasEdge && (
           <div className="grid grid-cols-2 gap-4 mb-6">
-            <div className="bg-[#0a0a0f] rounded-xl p-4">
-              <div className="text-xs text-[#71717a] uppercase tracking-wider mb-2">Confidence</div>
-              <div className={`text-lg font-mono ${confidenceLabel === 'HIGH' ? 'text-green-400' : confidenceLabel === 'MED' ? 'text-yellow-400' : 'text-red-400'}`}>
+            <div className="bg-[#07070d] rounded-xl p-4 border border-[rgba(90,86,140,0.35)]">
+              <div className="text-xs neon-muted uppercase tracking-wider mb-2">Confidence</div>
+              <div className={`text-lg font-mono ${confidenceLabel === 'HIGH' ? 'text-[#6ad7ff]' : confidenceLabel === 'MED' ? 'text-[#f59e0b]' : 'text-[#ef4444]'}`}>
                 {confidenceLabel}
               </div>
             </div>
-            <div className="bg-[#0a0a0f] rounded-xl p-4">
-              <div className="text-xs text-[#71717a] uppercase tracking-wider mb-2">Stake Guide</div>
-              <div className="text-lg font-mono text-[#f0f0f5]">{stakeLabel}</div>
-              <div className="text-xs text-[#71717a] mt-1">Based on edge + EV</div>
+            <div className="bg-[#07070d] rounded-xl p-4 border border-[rgba(90,86,140,0.35)]">
+              <div className="text-xs neon-muted uppercase tracking-wider mb-2">Stake Guide</div>
+              <div className="text-lg font-mono text-[#f2f2f7]">{stakeLabel}</div>
+              <div className="text-xs neon-muted mt-1">Based on edge + EV</div>
             </div>
           </div>
         )}
 
         {/* Transparency */}
         {hasEdge && (
-          <div className="bg-[#0a0a0f] rounded-xl p-4 mb-6">
-            <div className="text-xs text-[#71717a] uppercase tracking-wider mb-3">Bet Breakdown</div>
+          <div className="bg-[#07070d] rounded-xl p-4 mb-6 border border-[rgba(90,86,140,0.35)]">
+            <div className="text-xs neon-muted uppercase tracking-wider mb-3">Bet Breakdown</div>
             <div className="grid grid-cols-2 gap-3 text-sm">
-              <div className="text-[#71717a]">Model Prob</div>
-              <div className="text-[#f0f0f5] font-mono">{betModelProb?.toFixed(1)}%</div>
-              <div className="text-[#71717a]">Market Prob</div>
-              <div className="text-[#f0f0f5] font-mono">{betMarketProb?.toFixed(1)}%</div>
-              <div className="text-[#71717a]">Decimal Odds</div>
-              <div className="text-[#f0f0f5] font-mono">{betDecimal?.toFixed(3)}</div>
-              <div className="text-[#71717a]">EV / $1</div>
-              <div className="text-[#f0f0f5] font-mono">{betEV?.toFixed(3)}</div>
-              <div className="text-[#71717a]">Stake %</div>
-              <div className="text-[#f0f0f5] font-mono">{betStakeFrac ? (betStakeFrac * 100).toFixed(2) + '%' : '0.00%'}</div>
-              <div className="text-[#71717a]">Stake $</div>
-              <div className="text-[#f0f0f5] font-mono">{betStakeDollars ? `$${betStakeDollars.toFixed(2)}` : '$0.00'}</div>
+              <div className="neon-muted">Model Prob</div>
+              <div className="text-[#f2f2f7] font-mono">{betModelProb?.toFixed(1)}%</div>
+              <div className="neon-muted">Market Prob</div>
+              <div className="text-[#f2f2f7] font-mono">{betMarketProb?.toFixed(1)}%</div>
+              <div className="neon-muted">Decimal Odds</div>
+              <div className="text-[#f2f2f7] font-mono">{betDecimal?.toFixed(3)}</div>
+              <div className="neon-muted">EV / $1</div>
+              <div className="text-[#f2f2f7] font-mono">{betEV?.toFixed(3)}</div>
+              <div className="neon-muted">Stake %</div>
+              <div className="text-[#f2f2f7] font-mono">{betStakeFrac ? (betStakeFrac * 100).toFixed(2) + '%' : '0.00%'}</div>
+              <div className="neon-muted">Stake $</div>
+              <div className="text-[#f2f2f7] font-mono">{betStakeDollars ? `$${betStakeDollars.toFixed(2)}` : '$0.00'}</div>
             </div>
           </div>
         )}
 
         {/* Injuries Section */}
         {(homeInjuries.length > 0 || awayInjuries.length > 0) && (
-          <div className="border-t border-[#2a2a35] pt-4 mb-4">
-            <div className="text-xs text-[#71717a] uppercase tracking-wider mb-3">Injuries</div>
+          <div className="border-t border-[rgba(90,86,140,0.45)] pt-4 mb-4">
+            <div className="text-xs neon-muted uppercase tracking-wider mb-3">Injuries</div>
             <div className="grid grid-cols-2 gap-4">
               {/* Away Injuries */}
               <div>
@@ -388,11 +386,11 @@ export default function GameCard({
                       </div>
                     ))}
                     {awayInjuries.length > 3 && (
-                      <div className="text-xs text-[#71717a]">+{awayInjuries.length - 3} more</div>
+                      <div className="text-xs neon-muted">+{awayInjuries.length - 3} more</div>
                     )}
                   </div>
                 ) : (
-                  <div className="text-xs text-[#71717a]">No injuries</div>
+                  <div className="text-xs neon-muted">No injuries</div>
                 )}
               </div>
 
@@ -407,11 +405,11 @@ export default function GameCard({
                       </div>
                     ))}
                     {homeInjuries.length > 3 && (
-                      <div className="text-xs text-[#71717a]">+{homeInjuries.length - 3} more</div>
+                      <div className="text-xs neon-muted">+{homeInjuries.length - 3} more</div>
                     )}
                   </div>
                 ) : (
-                  <div className="text-xs text-[#71717a]">No injuries</div>
+                  <div className="text-xs neon-muted">No injuries</div>
                 )}
               </div>
             </div>
@@ -420,17 +418,17 @@ export default function GameCard({
 
         {/* Bet Recommendation */}
         {hasEdge && (
-          <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-4">
+          <div className="bg-[#07070d] border border-[rgba(106,215,255,0.4)] rounded-xl p-4">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-green-400 font-bold text-lg">{betSide}</div>
+                <div className="text-[#6ad7ff] font-bold text-lg">{betSide}</div>
                 <div className="text-sm text-[#a1a1aa]">
                   {formatOdds(betOdds)} | Edge: +{betEdge}%
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-xs text-[#71717a] uppercase">Expected Value</div>
-                <div className="text-2xl font-mono text-green-400 font-bold">
+                <div className="text-xs neon-muted uppercase">Expected Value</div>
+                <div className="text-2xl font-mono text-[#6ad7ff] font-bold">
                   +{(betEV * 100).toFixed(0)}%
                 </div>
               </div>

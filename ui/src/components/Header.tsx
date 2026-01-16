@@ -9,14 +9,14 @@ export default function Header() {
   });
 
   return (
-    <header className="border-b border-[#2a2a35] bg-[#0a0a0f]/80 backdrop-blur-xl sticky top-0 z-50">
+    <header className="neon-header sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#402fb5] via-[#6ad7ff] to-[#cf30aa] flex items-center justify-center shadow-[0_0_20px_rgba(207,48,170,0.4)]">
               <svg
-                className="w-6 h-6 text-black"
+                className="w-6 h-6 text-white"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -30,15 +30,14 @@ export default function Header() {
               </svg>
             </div>
             <div>
-              <h1 className="text-xl font-bold text-[#f0f0f5]">Sports Edge</h1>
-              <p className="text-xs text-[#71717a]">AI-Powered Betting Intelligence</p>
+              <h1 className="text-xl font-bold text-[#f2f2f7]">Sports Edge</h1>
             </div>
           </div>
 
           {/* Date */}
           <div className="text-right">
-            <div className="text-sm text-[#71717a]">Today</div>
-            <div className="text-[#f0f0f5] font-medium">{today}</div>
+            <div className="text-sm neon-muted">Today</div>
+            <div className="text-[#f2f2f7] font-medium">{today}</div>
           </div>
         </div>
       </div>
